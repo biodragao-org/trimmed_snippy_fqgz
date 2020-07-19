@@ -41,8 +41,8 @@ process snippy {
     path refGbk from ch_refGbk
     set genomeFileName, file(genomeReads) from ch_in_snippy
 
-    output:
-    path("""${genomeName}""") into ch_out_snippy
+    //output:
+    //path("""${genomeName}""") into ch_out_snippy
 
     script:
     genomeName= genomeFileName.toString().split("\\_")[0]
