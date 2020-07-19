@@ -10,7 +10,7 @@ params.trimmed= true
 params.saveBy= 'copy'
 
 
-ch_refGbk = Channel.value("$baseDir/NC000962_3.gbk")
+ch_refGbk = Channel.value("NC000962_3.gbk")
 
 
 inputUntrimmedRawFilePattern = "./*_{R1,R2}.fastq.gz"
