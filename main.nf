@@ -8,6 +8,8 @@ params
 
 params.trimmed= true
 params.saveBy= 'copy'
+params.ram= 4
+params.cpus= 4
 
 params.refGbk = "NC000962_3.gbk"
 
@@ -45,6 +47,6 @@ process snippy {
     genomeName= genomeFileName.toString().split("\\_")[0]
 
     """
-    snippy --cpus 4 --outdir $genomeName --ref $refGbk --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
+    snippy --cpus ${params.cpus} --ram ${params.ram} --outdir $genomeName --ref $refGbk --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
     """
 }
