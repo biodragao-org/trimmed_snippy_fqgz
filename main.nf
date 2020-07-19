@@ -19,6 +19,8 @@ inputRawFilePattern = params.trimmed ? inputTrimmedRawFilePattern : inputUntrimm
 Channel.fromFilePairs(inputRawFilePattern)
         .into { ch_in_snippy }
 
+Channel.value("$baseDir/NC000962_3.gbk")
+       .into {ch_refGbk}
 
 /*
 ###############
@@ -30,9 +32,10 @@ process snippy {
     container 'quay.io/biocontainers/snippy:4.6.0--0'
     //container 'ummidock/snippy_tseemann:4.6.0-02'
     publishDir 'results/snippy', mode: params.saveBy
+    stageInMode 'symlink'
 
     input:
-    path refGbk from "$baseDir/NC000962_3.gbk"
+    path refGbk from ch_refGbk
     set genomeFileName, file(genomeReads) from ch_in_snippy
 
     output:
