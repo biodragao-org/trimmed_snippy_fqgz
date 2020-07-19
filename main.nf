@@ -42,7 +42,7 @@ process snippy {
 
     script:
     genomeName= genomeFileName.toString().split("\\_")[0]
-    refGbkLocation = $baseDir + "/" + refGbk
+    refGbkLocation = $workflow.baseDir + "/" + refGbk
 
     """
     snippy --cpus 4 --outdir $genomeName --ref $refGbkLocation --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
