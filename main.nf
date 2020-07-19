@@ -19,7 +19,7 @@ inputRawFilePattern = params.trimmed ? inputTrimmedRawFilePattern : inputUntrimm
 Channel.fromFilePairs(inputRawFilePattern)
         .into { ch_in_snippy }
 
-ch_refGbk = Channel.value("$baseDir/$params.refGbk")
+ch_refGbk = Channel.value("$params.refGbk")
 
 
 /*
@@ -42,8 +42,9 @@ process snippy {
 
     script:
     genomeName= genomeFileName.toString().split("\\_")[0]
+    refGbkLocation = $baseDir + "/" + refGbk
 
     """
-    snippy --cpus 4 --outdir $genomeName --ref ${refGbk} --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
+    snippy --cpus 4 --outdir $genomeName --ref $refGbkLocation --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
     """
 }
