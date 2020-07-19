@@ -10,9 +10,6 @@ params.trimmed= true
 params.saveBy= 'copy'
 
 params.refGbk = "NC000962_3.gbk"
-refGbkLocation = $baseDir + "/" + params.refGbk
-
-
 
 inputUntrimmedRawFilePattern = "./*_{R1,R2}.fastq.gz"
 inputTrimmedRawFilePattern = "./*_{R1,R2}.p.fastq.gz"
@@ -21,8 +18,6 @@ inputRawFilePattern = params.trimmed ? inputTrimmedRawFilePattern : inputUntrimm
 
 Channel.fromFilePairs(inputRawFilePattern)
         .into { ch_in_snippy }
-
-ch_refGbk = Channel.value(refGbkLocation)
 
 
 /*
@@ -37,7 +32,7 @@ process snippy {
     publishDir 'results/snippy', mode: params.saveBy
 
     input:
-    file refGbk from ch_refGbk
+    path refGbk from "$baseDir/NC000962_3.gbk"
     set genomeFileName, file(genomeReads) from ch_in_snippy
 
     output:
