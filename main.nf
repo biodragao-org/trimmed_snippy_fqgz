@@ -19,10 +19,10 @@ inputTrimmedRawFilePattern = "./*_{R1,R2}.p.fastq.gz"
 inputRawFilePattern = params.trimmed ? inputTrimmedRawFilePattern : inputUntrimmedRawFilePattern
 
 Channel.fromFilePairs(inputRawFilePattern)
-        .into { ch_in_snippy }
+        .set { ch_in_snippy }
 
-Channel.value("$baseDir/NC000962_3.gbk")
-       .into {ch_refGbk}
+Channel.value("$workflow.launchDir/NC000962_3.gbk")
+       .set {ch_refGbk}
 
 /*
 ###############
@@ -32,9 +32,9 @@ snippy_command
 
 process snippy {
     container 'quay.io/biocontainers/snippy:4.6.0--0'
-    //container 'ummidock/snippy_tseemann:4.6.0-02'
     publishDir 'results/snippy', mode: params.saveBy
     stageInMode 'symlink'
+
 
     input:
     path refGbk from ch_refGbk
@@ -47,6 +47,11 @@ process snippy {
     genomeName= genomeFileName.toString().split("\\_")[0]
 
     """
+
     snippy --cpus ${params.cpus} --ram ${params.ram} --outdir $genomeName --ref $refGbk --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
     """
+    
 }
+
+// alternative container 
+//container 'ummidock/snippy_tseemann:4.6.0-02'
