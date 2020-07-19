@@ -44,6 +44,6 @@ process snippy {
     genomeName= genomeFileName.toString().split("\\_")[0]
 
     """
-    snippy --cpus 4 --outdir $genomeName --ref ${params.refGbk} --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
+    snippy --cpus 4 --outdir $genomeName --ref ${refGbk} --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
     """
 }
