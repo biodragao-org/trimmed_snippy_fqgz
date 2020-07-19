@@ -21,7 +21,7 @@ inputRawFilePattern = params.trimmed ? inputTrimmedRawFilePattern : inputUntrimm
 Channel.fromFilePairs(inputRawFilePattern)
         .into { ch_in_snippy }
 
-Channel.value("./NC000962_3.gbk")
+Channel.value("$workflow.projectDir/NC000962_3.gbk")
        .into {ch_refGbk}
 
 /*
