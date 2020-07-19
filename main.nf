@@ -19,7 +19,7 @@ inputRawFilePattern = params.trimmed ? inputTrimmedRawFilePattern : inputUntrimm
 Channel.fromFilePairs(inputRawFilePattern)
         .into { ch_in_snippy }
 
-ch_refGbk = Channel.fromPath("./$params.refGbk")
+ch_refGbk = Channel.value(path("./$params.refGbk"))
 
 
 /*
@@ -29,8 +29,8 @@ snippy_command
 */
 
 process snippy {
-    //container 'quay.io/biocontainers/snippy:4.6.0--0'
-    container 'ummidock/snippy_tseemann:4.6.0-02'
+    container 'quay.io/biocontainers/snippy:4.6.0--0'
+    //container 'ummidock/snippy_tseemann:4.6.0-02'
     publishDir 'results/snippy', mode: params.saveBy
 
     input:
