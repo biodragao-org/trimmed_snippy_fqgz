@@ -1,9 +1,25 @@
+#!/usr/bin/env nextflow
+
+/*
+################
+params
+################
+*/
+
+params.trimmed= true
+params.saveBy= 'copy'
+
+
 ch_refGbk = Channel.value("$baseDir/NC000962_3.gbk")
 
 
-Channel.fromFilePairs("./*_{R1,R2}.p.fastq.gz")
-        .into {  ch_in_snippy }
+inputUntrimmedRawFilePattern = "./*_{R1,R2}.fastq.gz"
+inputTrimmedRawFilePattern = "./*_{R1,R2}.p.fastq.gz"
 
+inputRawFilePattern = params.trimmed ? inputTrimmedRawFilePattern : inputUntrimmedRawFilePattern
+
+Channel.fromFilePairs(inputRawFilePattern)
+        .into { ch_in_snippy }
 
 /*
 ###############
@@ -14,7 +30,7 @@ snippy_command
 process snippy {
     container 'quay.io/biocontainers/snippy:4.6.0--0'
     //container 'ummidock/snippy_tseemann:4.6.0-02'
-    publishDir 'results/snippy'
+    publishDir 'results/snippy', mode: params.saveBy
 
     input:
     path refGbk from ch_refGbk
