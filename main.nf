@@ -35,6 +35,7 @@ process snippy {
     //container 'ummidock/snippy_tseemann:4.6.0-02'
     publishDir 'results/snippy', mode: params.saveBy
     stageInMode 'symlink'
+    echo true
 
     input:
     path refGbk from ch_refGbk
@@ -47,6 +48,9 @@ process snippy {
     genomeName= genomeFileName.toString().split("\\_")[0]
 
     """
-    snippy --cpus ${params.cpus} --ram ${params.ram} --outdir $genomeName --ref $refGbk --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
+    echo $workflow.projectDir
+    
     """
+    
+//    snippy --cpus ${params.cpus} --ram ${params.ram} --outdir $genomeName --ref $refGbk --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
 }
