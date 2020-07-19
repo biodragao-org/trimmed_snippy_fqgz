@@ -10,7 +10,7 @@ params.trimmed= true
 params.saveBy= 'copy'
 
 params.refGbk = "NC000962_3.gbk"
-refGbkLocation = $workflow.baseDir + "/" + refGbk
+refGbkLocation = $baseDir + "/" + params.refGbk
 
 
 
