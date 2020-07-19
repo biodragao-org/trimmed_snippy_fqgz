@@ -8,7 +8,10 @@ params
 
 params.trimmed= true
 params.saveBy= 'copy'
+
 params.refGbk = "NC000962_3.gbk"
+refGbkLocation = $workflow.baseDir + "/" + refGbk
+
 
 
 inputUntrimmedRawFilePattern = "./*_{R1,R2}.fastq.gz"
@@ -19,7 +22,7 @@ inputRawFilePattern = params.trimmed ? inputTrimmedRawFilePattern : inputUntrimm
 Channel.fromFilePairs(inputRawFilePattern)
         .into { ch_in_snippy }
 
-ch_refGbk = Channel.value("$params.refGbk")
+ch_refGbk = Channel.value(refGbkLocation)
 
 
 /*
@@ -42,9 +45,8 @@ process snippy {
 
     script:
     genomeName= genomeFileName.toString().split("\\_")[0]
-    refGbkLocation = $workflow.baseDir + "/" + refGbk
 
     """
-    snippy --cpus 4 --outdir $genomeName --ref $refGbkLocation --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
+    snippy --cpus 4 --outdir $genomeName --ref $refGbk --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
     """
 }
