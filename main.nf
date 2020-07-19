@@ -19,6 +19,9 @@ inputRawFilePattern = params.trimmed ? inputTrimmedRawFilePattern : inputUntrimm
 Channel.fromFilePairs(inputRawFilePattern)
         .into { ch_in_snippy }
 
+ch_refGbk = Channel.value("$baseDir/$params.refGbk")
+
+
 /*
 ###############
 snippy_command
@@ -31,6 +34,7 @@ process snippy {
     publishDir 'results/snippy', mode: params.saveBy
 
     input:
+    path refGbk from ch_refGbk
     set genomeFileName, file(genomeReads) from ch_in_snippy
 
     output:
