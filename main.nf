@@ -29,8 +29,8 @@ snippy_command
 */
 
 process snippy {
-    container 'quay.io/biocontainers/snippy:4.6.0--0'
-    //container 'ummidock/snippy_tseemann:4.6.0-02'
+    //container 'quay.io/biocontainers/snippy:4.6.0--0'
+    container 'ummidock/snippy_tseemann:4.6.0-02'
     publishDir 'results/snippy', mode: params.saveBy
 
     input:
