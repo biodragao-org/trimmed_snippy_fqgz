@@ -34,7 +34,7 @@ process snippy {
     publishDir 'results/snippy', mode: params.saveBy
 
     input:
-    path refGbk from ch_refGbk
+    file refGbk from ch_refGbk
     set genomeFileName, file(genomeReads) from ch_in_snippy
 
     output:
