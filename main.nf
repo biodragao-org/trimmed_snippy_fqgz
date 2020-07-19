@@ -48,7 +48,7 @@ process snippy {
     genomeName= genomeFileName.toString().split("\\_")[0]
 
     """
-    echo $workflow.projectDir
+    echo $workflow.launchDir
     
     """
     
