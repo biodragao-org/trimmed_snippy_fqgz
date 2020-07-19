@@ -34,7 +34,7 @@ process snippy {
     publishDir 'results/snippy', mode: params.saveBy
 
     input:
-    path refGbk from Channel.path("$baseDir/$params.refGbk")
+    path refGbk from Channel.fromPath("$baseDir/$params.refGbk")
     set genomeFileName, file(genomeReads) from ch_in_snippy
 
     output:
