@@ -8,9 +8,7 @@ params
 
 params.trimmed= true
 params.saveBy= 'copy'
-
-
-ch_refGbk = Channel.value("NC000962_3.gbk")
+params.refGbk = "NC000962_3.gbk"
 
 
 inputUntrimmedRawFilePattern = "./*_{R1,R2}.fastq.gz"
@@ -43,6 +41,6 @@ process snippy {
     genomeName= genomeFileName.toString().split("\\_")[0]
 
     """
-    snippy --cpus 4 --outdir $genomeName --ref $refGbk --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
+    snippy --cpus 4 --outdir $genomeName --ref ${params.refGbk} --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
     """
 }
