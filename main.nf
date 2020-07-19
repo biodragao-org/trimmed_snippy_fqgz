@@ -19,7 +19,7 @@ inputRawFilePattern = params.trimmed ? inputTrimmedRawFilePattern : inputUntrimm
 Channel.fromFilePairs(inputRawFilePattern)
         .into { ch_in_snippy }
 
-ch_refGbk = Channel.value("$workflow.baseDir/$params.refGbk")
+ch_refGbk = Channel.value("$baseDir/$params.refGbk")
 
 
 /*
