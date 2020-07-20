@@ -30,12 +30,19 @@ snippy_command
 ###############
 */
 
+// alternative container 
+// container 'quay.io/biocontainers/snippy:4.6.0--0'
+
+
+
 process snippy {
     container 'ummidock/snippy_tseemann:4.6.0-02'
     publishDir 'results/snippy', mode: params.saveBy
     stageInMode 'symlink'
     errorStrategy 'ignore'
-
+        
+    when:
+    !params.snippyCore
 
     input:
     path refGbk from ch_refGbk
@@ -54,5 +61,29 @@ process snippy {
     
 }
 
-// alternative container 
-// container 'quay.io/biocontainers/snippy:4.6.0--0'
+
+// TODO implement the snippy-core process
+process snippyCore {
+    container 'ummidock/snippy_tseemann:4.6.0-02'
+    publishDir 'results/snippy', mode: params.saveBy
+        
+    when:
+    params.snippyCore
+
+    input:
+    path refGbk from ch_refGbk
+    set genomeFileName, file(genomeReads) from ch_in_snippy
+
+    output:
+    path("""${genomeName}""") into ch_out_snippy
+
+    script:
+
+    """
+
+    snippy-core 
+    """
+ 
+ 
+
+}
