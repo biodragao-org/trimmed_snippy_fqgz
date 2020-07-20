@@ -8,7 +8,7 @@ params
 
 params.trimmed= true
 params.saveBy= 'copy'
-params.ram= 4
+params.ram= 7
 params.cpus= 4
 
 params.refGbk = "NC000962_3.gbk"
@@ -34,6 +34,7 @@ process snippy {
     container 'ummidock/snippy_tseemann:4.6.0-02'
     publishDir 'results/snippy', mode: params.saveBy
     stageInMode 'symlink'
+    errorStrategy 'ignore'
 
 
     input:
