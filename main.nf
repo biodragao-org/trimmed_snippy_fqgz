@@ -6,10 +6,10 @@ params
 ################
 */
 
-params.trimmed= true
-params.saveBy= 'copy'
-params.ram= 4
-params.cpus= 4
+params.trimmed = true
+params.saveBy = 'copy'
+params.ram = 4
+params.cpus = 4
 
 params.refGbk = "NC000962_3.gbk"
 
@@ -22,7 +22,7 @@ Channel.fromFilePairs(inputRawFilePattern)
         .set { ch_in_snippy }
 
 Channel.value("$workflow.launchDir/NC000962_3.gbk")
-       .set {ch_refGbk}
+        .set { ch_refGbk }
 
 /*
 ###############
@@ -44,14 +44,21 @@ process snippy {
     path("""${genomeName}""") into ch_out_snippy
 
     script:
-    genomeName= genomeFileName.toString().split("\\_")[0]
+    genomeName = genomeFileName.toString().split("\\_")[0]
 
     """
-
     snippy --cpus ${params.cpus} --ram ${params.ram} --outdir $genomeName --ref $refGbk --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
     """
-    
+
 }
 
-// alternative container 
+/*
+#==============================================
+# extra
+#==============================================
+*/
+
+
+// alternative container
 //container 'ummidock/snippy_tseemann:4.6.0-02'
+
