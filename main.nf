@@ -8,8 +8,9 @@ params
 
 params.trimmed= true
 params.saveBy= 'copy'
-params.ram= 7
+params.ram= 4
 params.cpus= 4
+params.snippyCore = true
 
 params.refGbk = "NC000962_3.gbk"
 
@@ -29,10 +30,6 @@ Channel.value("$workflow.launchDir/NC000962_3.gbk")
 snippy_command
 ###############
 */
-
-// alternative container 
-// container 'quay.io/biocontainers/snippy:4.6.0--0'
-
 
 
 process snippy {
@@ -87,3 +84,6 @@ process snippyCore {
  
 
 }
+
+// alternative container 
+// container 'quay.io/biocontainers/snippy:4.6.0--0'
