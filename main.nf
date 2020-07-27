@@ -8,7 +8,7 @@ params
 
 params.trimmed= true
 params.saveBy= 'copy'
-params.ram= 4
+params.ram= 7
 params.cpus= 4
 
 params.refGbk = "NC000962_3.gbk"
@@ -31,9 +31,10 @@ snippy_command
 */
 
 process snippy {
-    container 'quay.io/biocontainers/snippy:4.6.0--0'
+    container 'ummidock/snippy_tseemann:4.6.0-02'
     publishDir 'results/snippy', mode: params.saveBy
     stageInMode 'symlink'
+    errorStrategy 'ignore'
 
 
     input:
@@ -54,4 +55,4 @@ process snippy {
 }
 
 // alternative container 
-//container 'ummidock/snippy_tseemann:4.6.0-02'
+// container 'quay.io/biocontainers/snippy:4.6.0--0'
