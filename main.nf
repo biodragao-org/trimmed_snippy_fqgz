@@ -95,4 +95,3 @@ process snippyCore {
 
 // alternative container
 //container 'ummidock/snippy_tseemann:4.6.0-02'
-
