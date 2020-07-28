@@ -1,40 +1,46 @@
 #!/usr/bin/env nextflow
 
+
 /*
-################
-params
-################
+#==============================================
+code documentation
+#==============================================
 */
 
-params.trimmed= true
-params.saveBy= 'copy'
-params.ram= 7
-params.cpus= 4
+/*
+#==============================================
+params
+#==============================================
+*/
+
+params.resultsDir = 'results/snippy'
+params.filePattern = "./*_{R1,R2}.fastq.gz"
+params.saveMode = 'copy'
+params.ram = 4
+params.cpus = 4
+params.snippyCore = false
+
 
 params.refGbk = "NC000962_3.gbk"
 
-inputUntrimmedRawFilePattern = "./*_{R1,R2}.fastq.gz"
-inputTrimmedRawFilePattern = "./*_{R1,R2}.p.fastq.gz"
-
-inputRawFilePattern = params.trimmed ? inputTrimmedRawFilePattern : inputUntrimmedRawFilePattern
-
-Channel.fromFilePairs(inputRawFilePattern)
+Channel.fromFilePairs(params.filePattern)
         .set { ch_in_snippy }
 
 Channel.value("$workflow.launchDir/NC000962_3.gbk")
-       .set {ch_refGbk}
+        .set { ch_refGbk }
 
 /*
-###############
-snippy_command
-###############
+#==============================================
+snippy
+#==============================================
 */
 
 process snippy {
-    container 'ummidock/snippy_tseemann:4.6.0-02'
-    publishDir 'results/snippy', mode: params.saveBy
+    container 'quay.io/biocontainers/snippy:4.6.0--0'
+    publishDir params.resultsDir, mode: params.saveMode
     stageInMode 'symlink'
-    errorStrategy 'ignore'
+    errorStrategy 'retry'
+    maxRetries 3
 
 
     input:
@@ -44,15 +50,48 @@ process snippy {
     output:
     path("""${genomeName}""") into ch_out_snippy
 
+    when:
+    !params.snippyCore
+
     script:
-    genomeName= genomeFileName.toString().split("\\_")[0]
+    genomeName = genomeFileName.toString().split("\\_")[0]
 
     """
-
     snippy --cpus ${params.cpus} --ram ${params.ram} --outdir $genomeName --ref $refGbk --R1 ${genomeReads[0]} --R2 ${genomeReads[1]}
     """
-    
+
 }
 
-// alternative container 
-// container 'quay.io/biocontainers/snippy:4.6.0--0'
+// TODO implement the snippy-core process
+process snippyCore {
+    container 'ummidock/snippy_tseemann:4.6.0-02'
+    publishDir params.resultsDir, mode: params.saveBy
+
+    when:
+    params.snippyCore
+
+    input:
+    path refGbk from ch_refGbk
+    set genomeFileName, file(genomeReads) from ch_in_snippy
+
+    output:
+    path("""${genomeName}""") into ch_out_snippy
+
+    script:
+
+    """
+    snippy-core 
+    """
+
+}
+
+
+/*
+#==============================================
+# extra
+#==============================================
+*/
+
+
+// alternative container
+//container 'ummidock/snippy_tseemann:4.6.0-02'
