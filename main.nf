@@ -18,6 +18,8 @@ params.filePattern = "./*_{R1,R2}.fastq.gz"
 params.saveMode = 'copy'
 params.ram = 4
 params.cpus = 4
+params.snippyCore = false
+
 
 params.refGbk = "NC000962_3.gbk"
 
@@ -48,6 +50,9 @@ process snippy {
     output:
     path("""${genomeName}""") into ch_out_snippy
 
+    when:
+    !params.snippyCore
+
     script:
     genomeName = genomeFileName.toString().split("\\_")[0]
 
@@ -56,6 +61,30 @@ process snippy {
     """
 
 }
+
+// TODO implement the snippy-core process
+process snippyCore {
+    container 'ummidock/snippy_tseemann:4.6.0-02'
+    publishDir params.resultsDir, mode: params.saveBy
+
+    when:
+    params.snippyCore
+
+    input:
+    path refGbk from ch_refGbk
+    set genomeFileName, file(genomeReads) from ch_in_snippy
+
+    output:
+    path("""${genomeName}""") into ch_out_snippy
+
+    script:
+
+    """
+    snippy-core 
+    """
+
+}
+
 
 /*
 #==============================================
