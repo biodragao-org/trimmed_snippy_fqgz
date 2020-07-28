@@ -1,39 +1,44 @@
 #!/usr/bin/env nextflow
 
+
 /*
-################
-params
-################
+#==============================================
+code documentation
+#==============================================
 */
 
-params.trimmed = true
-params.saveBy = 'copy'
+/*
+#==============================================
+params
+#==============================================
+*/
+
+params.resultsDir = 'results/snippy'
+params.filePattern = "./*_{R1,R2}.fastq.gz"
+params.saveMode = 'copy'
 params.ram = 4
 params.cpus = 4
 
 params.refGbk = "NC000962_3.gbk"
 
-inputUntrimmedRawFilePattern = "./*_{R1,R2}.fastq.gz"
-inputTrimmedRawFilePattern = "./*_{R1,R2}.p.fastq.gz"
-
-inputRawFilePattern = params.trimmed ? inputTrimmedRawFilePattern : inputUntrimmedRawFilePattern
-
-Channel.fromFilePairs(inputRawFilePattern)
+Channel.fromFilePairs(params.filePattern)
         .set { ch_in_snippy }
 
 Channel.value("$workflow.launchDir/NC000962_3.gbk")
         .set { ch_refGbk }
 
 /*
-###############
-snippy_command
-###############
+#==============================================
+snippy
+#==============================================
 */
 
 process snippy {
     container 'quay.io/biocontainers/snippy:4.6.0--0'
-    publishDir 'results/snippy', mode: params.saveBy
+    publishDir params.resultsDir, mode: params.saveMode
     stageInMode 'symlink'
+    errorStrategy 'retry'
+    maxRetries 3
 
 
     input:
