@@ -63,27 +63,27 @@ process snippy {
 }
 
 // TODO implement the snippy-core process
-process snippyCore {
-    container 'ummidock/snippy_tseemann:4.6.0-02'
-    publishDir params.resultsDir, mode: params.saveBy
-
-    when:
-    params.snippyCore
-
-    input:
-    path refGbk from ch_refGbk
-    set genomeFileName, file(genomeReads) from ch_in_snippy
-
-    output:
-    path("""${genomeName}""") into ch_out_snippy
-
-    script:
-
-    """
-    snippy-core 
-    """
-
-}
+//process snippyCore {
+//    container 'ummidock/snippy_tseemann:4.6.0-02'
+//    publishDir params.resultsDir, mode: params.saveBy
+//
+//    when:
+//    params.snippyCore
+//
+//    input:
+//    path refGbk from ch_refGbk
+//    set genomeFileName, file(genomeReads) from ch_in_snippy
+//
+//    output:
+//    path("""${genomeName}""") into ch_out_snippy
+//
+//    script:
+//
+//    """
+//    snippy-core 
+//    """
+//
+//}
 
 
 /*
